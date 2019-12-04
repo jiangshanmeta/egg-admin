@@ -10,6 +10,38 @@ module.exports = app => {
         password: {
             type: String,
         },
+        lastModifiedTS: {
+            type: Number,
+        },
+        status: {
+            type: Number,
+        },
     });
-    return mongoose.model('User', UserSchema);
+
+    UserSchema.method({
+        whatever() {
+            console.log('what ever call');
+        },
+    });
+    const model = mongoose.model('User', UserSchema);
+    model.handleDataBeforeCreate = function(data) {
+        data.password = data.password + '111';
+        return data;
+    };
+
+    model.handleDataBeforeUpdate = function(data) {
+        console.log(data);
+        data.lastModifiedTS = Date.now();
+        return data;
+    };
+
+    model.doDelete = async function(_id) {
+        await this.update({
+            _id,
+        }, {
+            status: 1,
+        });
+    };
+
+    return model;
 };

@@ -12,6 +12,8 @@ class UserController extends Controller {
         //     password: 'meimima',
         // });
 
+        ctx.model.User.aaa();
+
         ctx.body = await ctx.model.User.find({
             _id: '5dcebed1e154606ac267a4cb',
         });
